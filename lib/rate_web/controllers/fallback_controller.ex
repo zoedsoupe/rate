@@ -9,6 +9,13 @@ defmodule Rate.FallbackController do
 
   alias RateWeb.ErrorJSON
 
+  def call(conn, {:error, {:unauthorized, reason}}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(ErrorJSON)
+    |> render(:"401", error: reason)
+  end
+
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
@@ -23,4 +30,3 @@ defmodule Rate.FallbackController do
     |> render(:"422", error: reason)
   end
 end
-
