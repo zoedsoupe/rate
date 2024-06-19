@@ -2,7 +2,6 @@ defmodule Rate.Accounts.RequestMagicLink do
   @moduledoc false
 
   alias Rate.Accounts.User
-  alias Rate.Repo
 
   @token_salt Application.compile_env!(:rate, :authentication_token_salt)
   @recipient Application.compile_env!(:rate, :own_email)
@@ -22,7 +21,7 @@ defmodule Rate.Accounts.RequestMagicLink do
 
   defp send_magic_link_email(%User{} = user, token) do
     query = URI.encode_query(%{token: token})
-    uri = URI.new!(KontaWeb.Endpoint.url())
+    uri = URI.new!(RateWeb.Endpoint.url())
     url = URI.append_query(uri, query)
 
     Resend.Emails.send(%{

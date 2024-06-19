@@ -2,7 +2,6 @@ defmodule Rate.Accounts.Login do
   @moduledoc false
 
   alias Rate.Accounts.User
-  alias Rate.Repo
 
   @token_salt Application.compile_env!(:rate, :authentication_token_salt)
 

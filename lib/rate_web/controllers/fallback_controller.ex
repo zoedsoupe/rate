@@ -1,4 +1,4 @@
-defmodule Rate.FallbackController do
+defmodule RateWeb.FallbackController do
   @moduledoc """
   Translates controller action results into valid `Plug.Conn` responses.
 
