@@ -39,7 +39,8 @@ defmodule Rate.MixProject do
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:credo, "~> 1.7", only: :dev, runtime: false}
     ]
   end
 
