@@ -34,9 +34,9 @@ defmodule Rate.Accounts.User do
   end
 
   @spec find_by(params) :: {:ok, User.t()} | {:error, :not_found}
-        when params: [id: integer]
-  def find_by(id: id) do
-    if user = Repo.get(User, id) do
+        when params: [external_id: Ecto.UUID.t()] | [email: String.t()]
+  def find_by(external_id: id) do
+    if user = Repo.get_by(User, external_id: id) do
       {:ok, user}
     else
       {:error, :not_found}

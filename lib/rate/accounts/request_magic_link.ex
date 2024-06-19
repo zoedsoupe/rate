@@ -17,7 +17,7 @@ defmodule Rate.Accounts.RequestMagicLink do
   end
 
   defp generate_login_token(%User{} = user) do
-    Phoenix.Token.sign(RateWeb.Endpoint, @token_salt, user.id)
+    Phoenix.Token.sign(RateWeb.Endpoint, @token_salt, user.external_id)
   end
 
   defp send_magic_link_email(%User{} = user, token) do
