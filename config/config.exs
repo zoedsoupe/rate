@@ -9,6 +9,10 @@ import Config
 
 config :rate, env: config_env()
 
+config :rate, authentication_token_salt: System.fetch_env!("AUTH_TOKEN_SALT")
+
+config :rate, own_email: "rate@example.com"
+
 config :rate,
   ecto_repos: [Rate.Repo],
   generators: [timestamp_type: :utc_datetime]

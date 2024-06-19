@@ -42,4 +42,19 @@ defmodule Rate.Accounts.User do
       {:error, :not_found}
     end
   end
+
+  def find_by(email: email) do
+    if user = Repo.get_by(User, email: email) do
+      {:ok, user}
+    else
+      {:error, :not_found}
+    end
+  end
+
+  @spec get_or_create_user(email: String.t()) :: {:ok, User.t()} | {:error, atom}
+  def get_or_create_user(email: email) do
+    with {:error, :not_found} <- find_by(email: email) do
+      create(%{email: email, external_id: Ecto.UUID.generate()})
+    end
+  end
 end

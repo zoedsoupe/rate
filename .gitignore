@@ -42,3 +42,5 @@ npm-debug.log
 # NIX files
 result
 .nix-*/
+
+.env
