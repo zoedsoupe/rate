@@ -20,6 +20,10 @@ if System.get_env("PHX_SERVER") do
   config :rate, RateWeb.Endpoint, server: true
 end
 
+config :rate, Rate.Xchange,
+  client: Rate.XChange.ExchangeRatesClient,
+  api_key: System.get_env("XCHANGE_API_KEY")
+
 if config_env() == :prod do
   config :resend, Resend.Client, api_key: System.fetch_env!("RESEND_API_KEY")
 

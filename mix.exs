@@ -42,6 +42,7 @@ defmodule Rate.MixProject do
       {:bandit, "~> 1.2"},
       {:resend, "~> 0.4.2"},
       {:peri, "~> 0.2"},
+      {:req, "~> 0.5"},
       {:credo, "~> 1.7", only: :dev, runtime: false}
     ]
   end
