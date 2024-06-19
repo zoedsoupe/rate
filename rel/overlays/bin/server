@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+cd -P -- "$(dirname -- "$0")"
+./rate eval Rate.Release.migrate && PHX_SERVER=true exec ./rate start

@@ -24,7 +24,7 @@ config :rate, RateWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "1dpsWSSffb0VgtHG6TG3O9JgkHyXdg7FwxL1ZpfsVwWS2FOOtILHKqqM0AANaMNH",
-  watchers: [  ]
+  watchers: []
 
 # Enable dev routes for dashboard and mailbox
 config :rate, dev_routes: true
