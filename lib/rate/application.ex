@@ -11,7 +11,8 @@ defmodule Rate.Application do
       RateWeb.Telemetry,
       Rate.Repo,
       {Phoenix.PubSub, name: Rate.PubSub},
-      RateWeb.Endpoint
+      RateWeb.Endpoint,
+      Rate.Xchange.Cache
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

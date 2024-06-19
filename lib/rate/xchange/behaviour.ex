@@ -3,5 +3,6 @@ defmodule Rate.Xchange.Behaviour do
 
   alias Rate.Xchange
 
-  @callback get_conversion_rates :: {:ok, list(Xchange.Rate.t())} | {:error, atom}
+  @callback get_conversion_rates(opts) :: {:ok, list(Xchange.Rate.t())} | {:error, atom}
+            when opts: [] | [fetch_latest?: true]
 end

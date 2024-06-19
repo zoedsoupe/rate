@@ -14,9 +14,23 @@ defmodule Rate.Xchange.ExchangeRatesClient do
   end
 
   @impl true
-  def get_conversion_rates do
-    request = make_request()
+  def get_conversion_rates(opts \\ []) do
+    fetch_latest? = Keyword.get(opts, :fetch_latest?, false)
 
+    if fetch_latest? do
+      with {:ok, rates} <- fetch_latest_rates(make_request()) do
+        Xchange.Cache.cache_conversion_rates(rates)
+        {:ok, rates}
+      end
+    else
+      case Xchange.Cache.get_conversion_rates() do
+        [] -> get_conversion_rates(fetch_latest?: true)
+        rates -> {:ok, rates}
+      end
+    end
+  end
+
+  defp fetch_latest_rates(request) do
     case Req.get(request) do
       {:ok, %Req.Response{status: 200, body: body}} -> parse_rates_body(body)
       {:ok, %Req.Response{status: 404}} -> {:error, :client_not_found}
