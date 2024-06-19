@@ -21,6 +21,8 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
+  config :resend, Resend.Client, api_key: System.fetch_env!("RESEND_API_KEY")
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

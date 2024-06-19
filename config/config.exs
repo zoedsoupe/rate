@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :rate, env: config_env()
+
 config :rate,
   ecto_repos: [Rate.Repo],
   generators: [timestamp_type: :utc_datetime]

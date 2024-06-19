@@ -7,6 +7,10 @@ defmodule Rate do
   if it comes from the database, an external API or others.
   """
 
+  def get_env do
+    Application.get_env(:rate, :env)
+  end
+
   def model do
     quote do
       use Ecto.Schema
