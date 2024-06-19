@@ -46,6 +46,10 @@ defmodule Rate.Transactions.Transaction do
     %Transaction{}
     |> changeset(params)
     |> Repo.insert()
+    |> then(fn
+      {:ok, trx} -> {:ok, Repo.preload(trx, :user)}
+      err -> err
+    end)
   end
 
   def list_by(user_id: user_id) do

@@ -15,7 +15,7 @@ defmodule Rate.Xchange.ExchangeRatesClient do
 
   @impl true
   def get_conversion_rates(opts \\ []) do
-    fetch_latest? = Keyword.get(opts, :fetch_latest?, false)
+    fetch_latest? = Keyword.get(opts, :fetch_latest, false)
 
     if fetch_latest? do
       with {:ok, rates} <- fetch_latest_rates(make_request()) do
@@ -24,7 +24,7 @@ defmodule Rate.Xchange.ExchangeRatesClient do
       end
     else
       case Xchange.Cache.get_conversion_rates() do
-        [] -> get_conversion_rates(fetch_latest?: true)
+        [] -> get_conversion_rates(fetch_latest: true)
         rates -> {:ok, rates}
       end
     end

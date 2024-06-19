@@ -16,5 +16,8 @@ defmodule RateWeb.Router do
 
   scope "/api/v1", RateWeb do
     pipe_through [:api, :require_authenticated_user]
+
+    post "/convert", TransactionController, :register
+    get "/transactions", TransactionController, :list
   end
 end

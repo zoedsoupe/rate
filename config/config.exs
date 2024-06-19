@@ -11,7 +11,7 @@ config :rate, env: config_env()
 
 config :rate, authentication_token_salt: System.fetch_env!("AUTH_TOKEN_SALT")
 
-config :rate, own_email: "rate@example.com"
+config :rate, own_email: "rate-dev@noreply.pescarte.org.br"
 
 config :rate,
   ecto_repos: [Rate.Repo],

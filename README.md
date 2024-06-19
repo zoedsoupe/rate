@@ -59,7 +59,7 @@ docker compose up
 
 ### Convert Currency
 
-- **URL:** `/api/v1/:user-id/convert`
+- **URL:** `/api/v1/convert`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
 - **Request Body:**
@@ -96,7 +96,7 @@ In case of errors, besides the HTTP code, the body will be:
 
 ### List User Transactions
 
-- **URL:** `/api/transactions/:user_id`
+- **URL:** `/api/v1/transactions`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
 - **Response:**

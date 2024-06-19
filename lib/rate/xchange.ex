@@ -7,8 +7,8 @@ defmodule Rate.Xchange do
     Application.get_env(:rate, __MODULE__)[:client]
   end
 
-  def get_conversion_rates do
-    get_client().get_conversion_rates()
+  def get_conversion_rates(opts \\ []) do
+    get_client().get_conversion_rates(opts)
   end
 
   @spec convert(list(Xchange.Rate.t()), to_currency: String.t(), amount: integer) ::
