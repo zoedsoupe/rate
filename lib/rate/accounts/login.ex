@@ -3,7 +3,9 @@ defmodule Rate.Accounts.Login do
 
   alias Rate.Accounts.User
 
-  @token_salt Application.compile_env!(:rate, :authentication_token_salt)
+  defp get_token_salt do
+    Application.get_env(:rate, :authentication_token_salt)
+  end
 
   def run(token: token) do
     with {:ok, user_id} <- verify_login_token(token) do
@@ -12,6 +14,6 @@ defmodule Rate.Accounts.Login do
   end
 
   defp verify_login_token(token) do
-    Phoenix.Token.verify(RateWeb.Endpoint, @token_salt, token, max_age: 86_400)
+    Phoenix.Token.verify(RateWeb.Endpoint, get_token_salt(), token, max_age: 86_400)
   end
 end

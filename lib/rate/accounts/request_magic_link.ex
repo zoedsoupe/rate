@@ -3,8 +3,11 @@ defmodule Rate.Accounts.RequestMagicLink do
 
   alias Rate.Accounts.User
 
-  @token_salt Application.compile_env!(:rate, :authentication_token_salt)
   @recipient Application.compile_env!(:rate, :own_email)
+
+  defp get_token_salt do
+    Application.get_env(:rate, :authentication_token_salt)
+  end
 
   @spec run(email: String.t()) :: :ok | {:error, atom}
   def run(email: email) do
@@ -16,7 +19,7 @@ defmodule Rate.Accounts.RequestMagicLink do
   end
 
   defp generate_login_token(%User{} = user) do
-    Phoenix.Token.sign(RateWeb.Endpoint, @token_salt, user.external_id)
+    Phoenix.Token.sign(RateWeb.Endpoint, get_token_salt(), user.external_id)
   end
 
   defp send_magic_link_email(%User{} = user, token) do

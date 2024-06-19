@@ -20,6 +20,8 @@ if System.get_env("PHX_SERVER") do
   config :rate, RateWeb.Endpoint, server: true
 end
 
+config :rate, authentication_token_salt: System.fetch_env!("AUTH_TOKEN_SALT")
+
 config :rate, Rate.Xchange,
   client: Rate.XChange.ExchangeRatesClient,
   api_key: System.get_env("XCHANGE_API_KEY")
