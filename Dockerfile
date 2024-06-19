@@ -48,7 +48,7 @@ RUN mix release
 FROM ${RUNNER_IMAGE}
 
 RUN apk update --no-cache
-RUN apk add --no-cache tzdata openssl ncurses wget
+RUN apk add --no-cache tzdata openssl ncurses wget libstdc++
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en

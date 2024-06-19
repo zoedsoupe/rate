@@ -7,7 +7,9 @@ defmodule RateWeb.Auth do
 
   action_fallback RateWeb.FallbackController
 
-  @token_salt Application.compile_env!(:rate, :authentication_token_salt)
+  defp get_token_salt do
+    Application.get_env(:rate, :authentication_token_salt)
+  end
 
   @doc """
   Retrieves the current user from the session or a signed cookie, assigning it to the connection's assigns.
@@ -36,7 +38,7 @@ defmodule RateWeb.Auth do
   end
 
   defp verify_token(token) do
-    case Phoenix.Token.verify(RateWeb.Endpoint, @token_salt, token) do
+    case Phoenix.Token.verify(RateWeb.Endpoint, get_token_salt(), token) do
       {:ok, token} -> token
       {:error, _} -> nil
     end
