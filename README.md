@@ -1,146 +1,146 @@
 # Rate
 
-**Rate** is a currency converter API built with Elixir and Phoenix Framework. It provides real-time currency conversion using updated exchange rates from an external service and records each conversion transaction. 
+Rate is a currency converter API built with Elixir and Phoenix. It provides functionality to convert between multiple currencies and keeps track of the conversion transactions.
+
+## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+- [Running the Tests](#running-the-tests)
+- [Deployment](#deployment)
+- [Endpoints](#endpoints)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- Convert between four currencies: BRL, USD, EUR, and JPY.
-- Fetch conversion rates from [ExchangeRatesAPI](http://api.exchangeratesapi.io/latest?base=EUR).
-- Record conversion transactions with details: user ID, source currency, target currency, source amount, target amount, conversion rate, and timestamp.
-- Retrieve all conversion transactions performed by a specific user.
-- Authentication via Bearer token.
-- Comprehensive test coverage.
+- Fetches the latest conversion rates from a third-party service
+- Records and stores each transaction with detailed information
+- Provides endpoints to list all transactions for a user
+- Passwordless authentication using magic links
 
-## Technologies Used
+## Getting Started
 
-- Elixir
-- Phoenix Framework
-- Peri (custom schema validation library)
-- Req (HTTP client)
-- Ecto (database integration)
-- Phoenix.Token (authentication)
-- PostgreSQL (embedded database)
+### Prerequisites
 
-## Installation
+- Elixir and Phoenix installed
+- PostgreSQL database
+- Maybe Docker and docker compose
+
+### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/rate.git
-   cd rate
-   ```
+    ```sh
+    git clone https://github.com/yourusername/rate.git
+    cd rate
+    ```
 
 2. Install dependencies:
-   ```bash
-   mix deps.get
-   ```
+    ```sh
+    mix deps.get
+    ```
 
 3. Set up the database:
-   ```bash
-   mix ecto.create
-   mix ecto.migrate
-   ```
+    ```sh
+    mix ecto.setup
+    ```
 
-4. Start the Phoenix server:
-   ```bash
-   mix phx.server
-   ```
-
-The application will be available at `http://localhost:4000`.
+4. Start the server:
+    ```sh
+    mix phx.server
+    ```
 
 ### Docker
 
-You can also run this project with `docker` and `docker-compose`:
+Or just run with docker
 
 ```sh
 docker compose up
 ```
 
-## Endpoints
+## Configuration
 
-### Convert Currency
+Set up the following environment variables in your configuration file or `.env` file:
 
-- **URL:** `/api/v1/convert`
-- **Method:** `POST`
-- **Headers:** `Authorization: Bearer <token>`
-- **Request Body:**
-  ```json
-  {
-    "from_currency": "USD",
-    "to_currency": "EUR",
-    "amount": 42.42
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "data": {
-      "id": 1,
-      "user_id": 1,
-      "from_currency": "USD",
-      "to_currency": "EUR",
-      "from_amount": 42.42,
-      "to_amount": 85.0,
-      "conversion_rate": 0.85,
-      "timestamp": "2024-06-19T12:34:56Z"
-    }
-  }
-  ```
+- `EXCHANGE_RATES_API_KEY`: Your API key for the currency conversion service
+- `AUTHENTICATION_TOKEN_SALT`: A secret key for generating authentication tokens
+- `OWN_EMAIL`: The email address from which magic link emails will be sent
 
-In case of errors, besides the HTTP code, the body will be:
-```json
-{
-  "status": "error",
-  "message": "SOME ERROR MESSAGE"
-}
-```
+## Running the Tests
 
-### List User Transactions
+To run the tests, use the following command:
 
-- **URL:** `/api/v1/transactions`
-- **Method:** `GET`
-- **Headers:** `Authorization: Bearer <token>`
-- **Response:**
-  ```json
-  {
-    "data": [
-      {
-        "id": 1,
-        "user_id": 1,
-        "from_currency": "USD",
-        "to_currency": "EUR",
-        "from_amount": 100.0,
-        "to_amount": 85.0,
-        "conversion_rate": 0.85,
-        "timestamp": "2024-06-19T12:34:56Z"
-      }
-    ]
-  }
-  ```
-
-## Testing
-
-Run the tests using the following command:
-```bash
+```sh
 mix test
 ```
 
+### Test Coverage
+
+- **Rate.Accounts.Login**
+- **Rate.Accounts.RequestMagicLink**
+- **Rate.Xchange**
+- **Rate.Transactions.RegisterTransaction**
+- **RateWeb.AuthController**
+- **RateWeb.TransactionController**
+
 ## Deployment
 
-To deploy the application, you can use platforms like [fly.io](https://fly.io). Follow these general steps:
+This project uses Fly.io for deployment. Follow these steps to deploy your application:
 
-1. Create a new Heroku application:
-   ```bash
-   flyctl launch
-   ```
+1. Install Fly CLI:
+    ```sh
+    curl -L https://fly.io/install.sh | sh
+    ```
+
+2. Sign in to Fly.io:
+    ```sh
+    fly auth login
+    ```
+
+3. Create and configure a new Fly.io application:
+    ```sh
+    fly launch
+    ```
+
+4. Deploy your application:
+    ```sh
+    fly deploy
+    ```
+
+## Endpoints
+
+### Authentication
+
+- **Request Magic Link**
+  - **POST** `/api/auth/request_magic_link`
+  - **Parameters**: `email`
+  - **Description**: Sends a magic link to the specified email address for passwordless login.
+
+- **Login**
+  - **POST** `/api/auth/login`
+  - **Parameters**: `token`
+  - **Description**: Logs in the user using the provided token.
+
+### Transactions
+
+- **Register Transaction**
+  - **POST** `/api/transactions/register`
+  - **Parameters**: `from_currency`, `from_amount`, `to_currency`, `fetch_latest`
+  - **Description**: Registers a new currency conversion transaction.
+
+- **List Transactions**
+  - **GET** `/api/transactions`
+  - **Description**: Lists all transactions for the current user.
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request with your changes.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Create a new Pull Request
 
 ## License
 
 This project is licensed under the MIT License.
-
-## Acknowledgements
-
-- [ExchangeRatesAPI](http://api.exchangeratesapi.io/latest?base=EUR) for providing the exchange rates.
