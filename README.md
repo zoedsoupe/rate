@@ -55,6 +55,12 @@ Rate is a currency converter API built with Elixir and Phoenix. It provides func
 
 Or just run with docker
 
+First you need to login to GHCR:
+
+```sh
+echo <gh_pat> | docker login ghcr.io --username <gh_user> --password-stdin
+```
+
 ```sh
 docker compose up
 ```
@@ -140,6 +146,14 @@ This project uses Fly.io for deployment. Follow these steps to deploy your appli
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin feature/my-feature`)
 5. Create a new Pull Request
+
+## API Request collection
+
+There's a requests collection exported from [Insomnia](https://insomnia.rest/download). You can try the dev and the prod environments.
+
+## Note for test of production environement
+
+Note that i'm using the free tier of the ExchangeRates API and also for the Resend API to send emails. They have low api rate limits so maybe they're unavaiable
 
 ## License
 

@@ -54,7 +54,7 @@ docker-dev:
   COPY --dir priv ./
   RUN mix compile
   CMD ["mix", "dev"]
-  ARG GITHUB_REPO=zoedsoupe/jaya_test
+  ARG GITHUB_REPO=zoedsoupe/rate
   SAVE IMAGE --push ghcr.io/$GITHUB_REPO:dev
 
 docker-dev-arm:

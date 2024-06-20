@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  pescarte:
-    image: ghcr.io/zoedsoupe/jaya_test:dev
+  rate:
+    image: ghcr.io/zoedsoupe/rate:dev
     command: ["mix", "dev"]
     container_name: rate
     ports:
@@ -10,7 +10,7 @@ services:
     depends_on:
       - database
     env_file:
-      - .env-sample
+      - .env.test
     volumes:
       - .:/src
     environment:

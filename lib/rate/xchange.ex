@@ -78,9 +78,9 @@ defmodule Rate.Xchange do
   def convert(rates, to_currency: to_currency, from_currency: from_currency, amount: amount) do
     with {:ok, rate} <- Xchange.Rate.find_by(rates, currency: to_currency),
          {:ok, source_rate} <- Xchange.Rate.find_by(rates, currency: from_currency) do
-      amount = Decimal.from_float(amount)
-      to_currency_rate = Decimal.from_float(rate.conversion_rate)
-      from_currency_rate = Decimal.from_float(source_rate.conversion_rate)
+      amount = to_decimal(amount)
+      to_currency_rate = to_decimal(rate.conversion_rate)
+      from_currency_rate = to_decimal(source_rate.conversion_rate)
 
       amount_in_eur = Decimal.div(amount, to_currency_rate)
       target_amount = Decimal.mult(amount_in_eur, from_currency_rate)
@@ -88,5 +88,15 @@ defmodule Rate.Xchange do
 
       {:ok, Decimal.to_float(target_amount_rounded), rate}
     end
+  end
+
+  defp to_decimal(%{conversion_rate: amount}) do
+    amount
+    |> to_string()
+    |> Decimal.new()
+  end
+
+  defp to_decimal(amount) do
+    to_decimal(%{conversion_rate: amount})
   end
 end
