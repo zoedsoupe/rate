@@ -1,5 +1,13 @@
 defmodule Rate.Accounts.RequestMagicLink do
-  @moduledoc false
+  @moduledoc """
+  Handles the generation and sending of magic links for passwordless authentication.
+
+  This module provides functionality to generate a login token, create a magic link, and send it to the user's email address for authentication.
+
+  ## Functions
+
+    * `run/1` - Initiates the process of sending a magic link to the user's email address.
+  """
 
   alias Rate.Accounts.User
 
@@ -9,6 +17,33 @@ defmodule Rate.Accounts.RequestMagicLink do
     Application.get_env(:rate, :authentication_token_salt)
   end
 
+  @doc """
+  Initiates the process of sending a magic link to the user's email address.
+
+  This function performs the following steps:
+
+    1. Retrieves or creates a user based on the provided email.
+    2. Generates a login token for the user.
+    3. Sends an email containing the magic link with the token to the user.
+
+  ## Parameters
+
+    - `email`: The email address of the user.
+
+  ## Examples
+
+      iex> Rate.Accounts.RequestMagicLink.run(email: "user@example.com")
+      :ok
+
+      iex> Rate.Accounts.RequestMagicLink.run(email: "invalid@example.com")
+      {:error, :user_creation_failed}
+
+  ## Returns
+
+    - `:ok` if the magic link email was sent successfully.
+    - `{:error, reason}` if there was an error in the process.
+
+  """
   @spec run(email: String.t()) :: :ok | {:error, atom}
   def run(email: email) do
     with {:ok, user} <- User.get_or_create_user(email: email),

@@ -12,6 +12,10 @@ defmodule RateWeb.Router do
     pipe_through :api
 
     post "/", AuthController, :login
+
+    # when user clicks on email link
+    get "/login", AuthController, :request_magic_link
+    # when user send an API request
     post "/login", AuthController, :request_magic_link
   end
 

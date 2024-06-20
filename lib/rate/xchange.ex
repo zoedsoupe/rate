@@ -1,5 +1,14 @@
 defmodule Rate.Xchange do
-  @moduledoc false
+  @moduledoc """
+  A facade module for handling currency exchange operations.
+
+  This module provides functions to fetch conversion rates and convert amounts between currencies using these rates.
+
+  ## Functions
+
+    * `get_conversion_rates/1` - Fetches the latest conversion rates.
+    * `convert/2` - Converts an amount from one currency to another using provided conversion rates.
+  """
 
   alias Rate.Xchange
 
@@ -7,10 +16,59 @@ defmodule Rate.Xchange do
     Application.get_env(:rate, __MODULE__)[:client]
   end
 
+  @doc """
+  Fetches the latest conversion rates.
+
+  This function uses the client module to fetch the latest conversion rates. It accepts an optional list of options that can be passed to the client module.
+
+  ## Parameters
+
+    - `opts`: A list of options to customize the fetching of conversion rates.
+
+  ## Examples
+
+      iex> Rate.Xchange.get_conversion_rates()
+      {:ok, [%Rate.Xchange.Rate{}]}
+
+      iex> Rate.Xchange.get_conversion_rates(base: "USD")
+      {:ok, [%Rate.Xchange.Rate{}]}
+
+  ## Returns
+
+    - `{:ok, rates}` if the conversion rates are successfully fetched.
+    - `{:error, reason}` if there is an error fetching the conversion rates.
+
+  """
   def get_conversion_rates(opts \\ []) do
     get_client().get_conversion_rates(opts)
   end
 
+  @doc """
+  Converts an amount from one currency to another using provided conversion rates.
+
+  This function takes a list of conversion rates and converts an amount from the source currency to the target currency.
+
+  ## Parameters
+
+    - `rates`: A list of `%Xchange.Rate{}` structs containing conversion rates.
+    - `to_currency`: The target currency to convert the amount to.
+    - `from_currency`: The source currency to convert the amount from.
+    - `amount`: The amount to be converted.
+
+  ## Examples
+
+      iex> Rate.Xchange.convert(rates, to_currency: "USD", from_currency: "EUR", amount: 100)
+      {:ok, 120.50, %Rate.Xchange.Rate{currency: "USD", conversion_rate: 1.205}}
+
+      iex> Rate.Xchange.convert(rates, to_currency: "JPY", from_currency: "USD", amount: 50)
+      {:ok, 5300.25, %Rate.Xchange.Rate{currency: "JPY", conversion_rate: 106.005}}
+
+  ## Returns
+
+    - `{:ok, converted_amount, rate}` if the conversion is successful, where `converted_amount` is the converted amount and `rate` is the rate used for conversion.
+    - `{:error, reason}` if there is an error during the conversion process.
+
+  """
   @spec convert(list(Xchange.Rate.t()),
           to_currency: String.t(),
           from_currency: String.t(),

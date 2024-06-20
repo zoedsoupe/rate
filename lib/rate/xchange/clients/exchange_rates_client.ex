@@ -1,5 +1,13 @@
 defmodule Rate.Xchange.ExchangeRatesClient do
-  @moduledoc false
+  @moduledoc """
+  A client module for fetching and caching currency conversion rates from an external API.
+
+  This module implements the `Xchange.Behaviour` and provides functionality to fetch the latest conversion rates from an external API and cache them. It can retrieve cached rates or fetch new ones as needed.
+
+  ## Functions
+
+    * `get_conversion_rates/1` - Retrieves the conversion rates, either from cache or by fetching the latest rates from the API.
+  """
 
   alias Rate.Xchange
 
@@ -13,6 +21,29 @@ defmodule Rate.Xchange.ExchangeRatesClient do
     Application.get_env(:rate, Xchange)[:api_key]
   end
 
+  @doc """
+  Retrieves the conversion rates.
+
+  This function checks if the latest rates should be fetched. If `fetch_latest` is true, it fetches the rates from the external API and caches them. Otherwise, it retrieves the rates from the cache.
+
+  ## Parameters
+
+    - `opts`: A list of options, including `:fetch_latest` to indicate whether to fetch the latest rates.
+
+  ## Examples
+
+      iex> Rate.Xchange.ExchangeRatesClient.get_conversion_rates()
+      {:ok, [%Rate.Xchange.Rate{}]}
+
+      iex> Rate.Xchange.ExchangeRatesClient.get_conversion_rates(fetch_latest: true)
+      {:ok, [%Rate.Xchange.Rate{}]}
+
+  ## Returns
+
+    - `{:ok, rates}` if the conversion rates are successfully retrieved.
+    - `{:error, reason}` if there is an error retrieving the rates.
+
+  """
   @impl true
   def get_conversion_rates(opts \\ []) do
     fetch_latest? = Keyword.get(opts, :fetch_latest, false)
