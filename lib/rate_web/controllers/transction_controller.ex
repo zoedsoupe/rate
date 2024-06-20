@@ -10,6 +10,8 @@ defmodule RateWeb.TransactionController do
 
   alias Rate.Money
 
+  action_fallback RateWeb.FallbackController
+
   defschema(:register_params, %{
     from_currency: {:required, :string},
     from_amount: {:required, :float},
