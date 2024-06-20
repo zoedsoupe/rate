@@ -10,10 +10,8 @@ defmodule RateWeb.AuthController do
 
   def request_magic_link(conn, params) do
     with {:ok, data} <- request_magic_link_params(params),
-         :ok <- RequestMagicLink.run(email: data["email"]) do
-      conn
-      |> put_status(:accepted)
-      |> send_resp()
+         :ok <- RequestMagicLink.run(email: data.email) do
+      send_resp(conn, :accepted, "")
     end
   end
 
@@ -21,10 +19,10 @@ defmodule RateWeb.AuthController do
 
   def login(conn, params) do
     with {:ok, data} <- login_params(params),
-         {:ok, user} <- Login.run(token: data["token"]) do
+         {:ok, user} <- Login.run(token: data.token) do
       conn
       |> put_status(:created)
-      |> json(%{data: %{token: data["token"], user_id: user.external_id}})
+      |> json(%{data: %{token: data.token, user_id: user.external_id}})
     else
       {:error, reason} -> {:error, {:unauthorized, reason}}
     end

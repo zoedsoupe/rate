@@ -11,13 +11,24 @@ defmodule Rate.Xchange do
     get_client().get_conversion_rates(opts)
   end
 
-  @spec convert(list(Xchange.Rate.t()), to_currency: String.t(), amount: integer) ::
+  @spec convert(list(Xchange.Rate.t()),
+          to_currency: String.t(),
+          from_currency: String.t(),
+          amount: integer
+        ) ::
           {:ok, converted :: float, Xchange.Rate.t()} | {:error, term}
-  def convert(rates, to_currency: to_currency, amount: amount) when is_integer(amount) do
-    with {:ok, rate} <- Xchange.Rate.find_by(rates, currency: to_currency) do
-      cents_rate = Rate.Money.to_cents(rate.conversion_rate)
+  def convert(rates, to_currency: to_currency, from_currency: from_currency, amount: amount) do
+    with {:ok, rate} <- Xchange.Rate.find_by(rates, currency: to_currency),
+         {:ok, source_rate} <- Xchange.Rate.find_by(rates, currency: from_currency) do
+      amount = Decimal.from_float(amount)
+      to_currency_rate = Decimal.from_float(rate.conversion_rate)
+      from_currency_rate = Decimal.from_float(source_rate.conversion_rate)
 
-      {:ok, Rate.Money.to_float(amount * cents_rate), rate}
+      amount_in_eur = Decimal.div(amount, to_currency_rate)
+      target_amount = Decimal.mult(amount_in_eur, from_currency_rate)
+      target_amount_rounded = Decimal.round(target_amount, 2)
+
+      {:ok, Decimal.to_float(target_amount_rounded), rate}
     end
   end
 end

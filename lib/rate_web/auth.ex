@@ -67,7 +67,11 @@ defmodule RateWeb.Auth do
     if conn.assigns[:current_user] do
       conn
     else
-      {:error, :unauthorized}
+      conn
+      |> put_status(:unauthorized)
+      |> put_view(RateWeb.ErrorJSON)
+      |> render(:"401", error: :missing_token)
+      |> halt()
     end
   end
 end

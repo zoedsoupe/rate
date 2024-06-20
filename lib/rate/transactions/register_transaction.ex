@@ -14,21 +14,29 @@ defmodule Rate.Transactions.RegisterTransaction do
         }
 
   @spec run(params_t) :: {:ok, Transaction.t()} | {:error, term}
-  def run(%{
-        userid: %User{} = user,
-        from_currency: from_currency,
-        from_amount: from_amount,
-        to_currency: to_currency,
-        fetch_latest: fetch_latest
-      }) do
+  def run(
+        %{
+          user: %User{} = user,
+          from_currency: from_currency,
+          from_amount: from_amount,
+          to_currency: to_currency
+        } = params
+      ) do
+    fetch_latest = Map.get(params, :fetch_latest, false)
+
     with {:ok, rates} <- Xchange.get_conversion_rates(fetch_latest: fetch_latest),
          {:ok, to_amount, rate} <-
-           Xchange.convert(rates, to_currency: to_currency, amount: from_amount),
+           Xchange.convert(rates,
+             to_currency: to_currency,
+             from_currency: from_currency,
+             amount: from_amount
+           ),
          {:ok, timestamp} <- parse_timestamp(rate.timestamp),
          {:ok, trx} <-
            Transaction.create(%{
              from_currency: from_currency,
-             from_amount: from_amount,
+             to_currency: to_currency,
+             from_amount: Rate.Money.to_cents(from_amount),
              inserted_at: timestamp,
              user_id: user.id,
              conversion_rate: rate.conversion_rate,

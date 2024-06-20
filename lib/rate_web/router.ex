@@ -11,6 +11,7 @@ defmodule RateWeb.Router do
   scope "/api/v1", RateWeb do
     pipe_through :api
 
+    post "/", AuthController, :login
     post "/login", AuthController, :request_magic_link
   end
 

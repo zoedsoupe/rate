@@ -12,8 +12,8 @@ defmodule Rate.Money do
     round(float_amount * 100)
   end
 
-  @spec to_float(integer) :: float
-  def to_float(cents) when is_integer(cents) do
+  @spec to_float(integer | float) :: float
+  def to_float(cents) do
     cents / 100
   end
 end

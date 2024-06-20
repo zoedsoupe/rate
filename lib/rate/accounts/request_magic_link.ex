@@ -25,6 +25,7 @@ defmodule Rate.Accounts.RequestMagicLink do
   defp send_magic_link_email(%User{} = user, token) do
     query = URI.encode_query(%{token: token})
     uri = URI.new!(RateWeb.Endpoint.url())
+    uri = URI.append_path(uri, "/api/v1")
     url = URI.append_query(uri, query)
 
     Resend.Emails.send(%{

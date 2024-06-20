@@ -25,7 +25,7 @@ defmodule Rate.Transactions.Transaction do
     timestamps()
   end
 
-  @fields ~w(from_amount from_currency to_currency conversion_rate external_id user_id)a
+  @fields ~w(from_amount from_currency to_currency conversion_rate external_id user_id inserted_at)a
 
   def changeset(trx \\ %Transaction{}, %{} = params) do
     trx
@@ -53,6 +53,6 @@ defmodule Rate.Transactions.Transaction do
   end
 
   def list_by(user_id: user_id) do
-    Repo.all(from t in Transaction, where: t.user_id == ^user_id)
+    Repo.all(from t in Transaction, where: t.user_id == ^user_id, preload: [:user])
   end
 end
