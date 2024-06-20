@@ -14,7 +14,7 @@ defmodule RateWeb.ErrorJSON do
   end
 
   def render("422.json", %{error: error}) do
-    %{status: "error", errors: %{detail: error}}
+    %{status: "error", errors: %{detail: inspect(error)}}
   end
 
   def render(template, _assigns) do

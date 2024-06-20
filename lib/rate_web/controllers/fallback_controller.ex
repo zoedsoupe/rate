@@ -23,6 +23,13 @@ defmodule RateWeb.FallbackController do
     |> render(:"404")
   end
 
+  def call(conn, {:error, [%Peri.Error{} | _] = errors}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(ErrorJSON)
+    |> render(:"422", error: Enum.map(errors, &Peri.Error.error_to_map/1))
+  end
+
   def call(conn, {:error, reason}) do
     conn
     |> put_status(:unprocessable_entity)

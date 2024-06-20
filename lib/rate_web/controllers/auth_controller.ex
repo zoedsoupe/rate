@@ -6,6 +6,8 @@ defmodule RateWeb.AuthController do
 
   import Peri
 
+  action_fallback RateWeb.FallbackController
+
   defschema(:request_magic_link_params, %{email: {:required, :string}})
 
   def request_magic_link(conn, params) do
